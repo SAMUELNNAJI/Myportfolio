@@ -1,0 +1,11 @@
+
+> developer-portfolio@1.0.0 dev
+> next dev
+
+▲ Next.js 16.4.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.20.96.1:3000
+- Environments: .env.local
+✓ Ready in 3.3s
+✓ Running next.config.ts took 575ms
+

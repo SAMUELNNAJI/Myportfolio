@@ -1,0 +1,392 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { ProjectVisual } from "@/components/sections/project-visual";
+import { Icon } from "@/components/ui/icon";
+import { hostnameOf, safeHttpUrl, type Project } from "@/lib/project-types";
+import { cn } from "@/lib/utils";
+
+type Device = "desktop" | "mobile";
+
+type ProjectPreviewProps = {
+  title: string;
+  liveUrl: string;
+  visual: Project["visual"];
+  accent: string;
+  domain: string;
+};
+
+const DESKTOP_WIDTH = 1280;
+const MOBILE_WIDTH = 390;
+
+export function ProjectPreview({
+  title,
+  liveUrl,
+  visual,
+  accent,
+  domain,
+}: ProjectPreviewProps) {
+  const rawUrl = safeHttpUrl(liveUrl);
+  const [device, setDevice] = useState<Device>("desktop");
+  const [expandedDevice, setExpandedDevice] = useState<Device>("desktop");
+  const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [useProxy, setUseProxy] = useState(true);
+  const autoSwitched = useRef(false);
+
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [cardWidth, setCardWidth] = useState(0);
+
+  useEffect(() => {
+    const node = cardRef.current;
+    if (!node) return;
+    const update = () => setCardWidth(node.clientWidth);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(node);
+    return () => ro.disconnect();
+  }, []);
+
+  const url = rawUrl
+    ? useProxy
+      ? `/api/preview?url=${encodeURIComponent(rawUrl)}`
+      : rawUrl
+    : "";
+
+  useEffect(() => {
+    if (!expanded) return;
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const { overflow, paddingRight } = document.body.style;
+    document.body.style.overflow = "hidden";
+    if (scrollBarWidth > 0) {
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setExpanded(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = overflow;
+      document.body.style.paddingRight = paddingRight;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [expanded]);
+
+  // Auto-fallback to the proxy if the direct embed does not load.
+  useEffect(() => {
+    if (!rawUrl || useProxy || failed || autoSwitched.current) return;
+    const timer = window.setTimeout(() => {
+      if (!loaded) {
+        autoSwitched.current = true;
+        setUseProxy(true);
+        setLoaded(false);
+        setFailed(false);
+      }
+    }, 6000);
+    return () => window.clearTimeout(timer);
+  }, [rawUrl, useProxy, failed, loaded]);
+
+  if (!rawUrl) {
+    return (
+      <div className="relative">
+        <ProjectVisual variant={visual} accent={accent} domain={domain} />
+        <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-canvas/75 px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-[0.14em] text-faint backdrop-blur-md sm:bottom-4 sm:left-4">
+          <Icon name="edit" size={10} />
+          Mockup — add a live URL
+        </span>
+      </div>
+    );
+  }
+
+  const host = hostnameOf(rawUrl);
+
+  const iframeProps = {
+    key: `${device}-${useProxy ? "proxy" : "direct"}`,
+    src: url,
+    title: `Live preview of ${title}`,
+    loading: "lazy" as const,
+    onLoad: () => setLoaded(true),
+    onError: () => setFailed(true),
+    sandbox:
+      "allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals allow-pointer-lock",
+    referrerPolicy: "no-referrer" as const,
+    className: "h-full w-full border-0 bg-white",
+  };
+
+  // Scaling so the site renders at a real device width and fits the card.
+  const baseWidth = device === "desktop" ? DESKTOP_WIDTH : MOBILE_WIDTH;
+  const frameWidth = device === "desktop" ? cardWidth : Math.min(cardWidth * 0.62, MOBILE_WIDTH);
+  const scale = cardWidth > 0 ? frameWidth / baseWidth : 1;
+
+  return (
+    <>
+      <div className="relative overflow-hidden border-b border-white/[0.07] bg-[#0a0708]">
+        <div className="flex h-9 items-center gap-2 border-b border-white/[0.07] bg-white/[0.025] px-3">
+          <div aria-hidden="true" className="hidden items-center gap-1 sm:flex">
+            <span className="h-1.5 w-1.5 rounded-full bg-white/20" />
+            <span className="h-1.5 w-1.5 rounded-full bg-white/15" />
+            <span className="h-1.5 w-1.5 rounded-full bg-white/10" />
+          </div>
+
+          <a
+            href={rawUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mx-auto flex min-w-0 max-w-[40%] items-center gap-1.5 rounded border border-white/[0.07] bg-white/[0.03] px-2 py-0.5 font-mono text-[8.5px] text-faint transition-colors hover:border-white/20 hover:text-ink sm:max-w-[52%]"
+            title={`Open ${host} in a new tab`}
+          >
+            <span className="h-1 w-1 shrink-0 rounded-full bg-emerald-400/70" />
+            <span className="truncate">{host}</span>
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
+
+          <div
+            role="group"
+            aria-label={`Preview size for ${title}`}
+            className="flex shrink-0 items-center gap-0.5 rounded-full border border-white/[0.09] bg-white/[0.03] p-0.5"
+          >
+            {(["desktop", "mobile"] as const).map((option) => {
+              const isActive = device === option;
+              return (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => {
+                    setDevice(option);
+                    setLoaded(false);
+                    setFailed(false);
+                  }}
+                  aria-pressed={isActive}
+                  title={option === "desktop" ? "Desktop view" : "Mobile view"}
+                  className={cn(
+                    "grid h-6 w-7 place-items-center rounded-full transition-colors duration-200",
+                    isActive
+                      ? "bg-accent/20 text-accent-soft"
+                      : "text-faint hover:text-ink",
+                  )}
+                >
+                  <Icon
+                    name={option === "desktop" ? "monitor" : "smartphone"}
+                    size={13}
+                  />
+                  <span className="sr-only">
+                    {option === "desktop" ? "Desktop view" : "Mobile view"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              setExpanded(true);
+              setExpandedDevice(device);
+              setLoaded(false);
+              setFailed(false);
+            }}
+            className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
+            aria-label={`Expand preview of ${title}`}
+            title="Expand to navigate"
+          >
+            <Icon name="external" size={12} />
+          </button>
+
+          <a
+            href={rawUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
+            aria-label={`Open ${title} in a new tab`}
+            title="Open in new tab"
+          >
+            <Icon name="arrow-up-right" size={12} />
+          </a>
+        </div>
+
+        <div ref={cardRef} className="relative aspect-[4/3] overflow-hidden bg-[#0a0708] sm:aspect-[16/10] lg:aspect-[16/9]">
+          <div
+            className="absolute inset-0 overflow-hidden bg-white"
+            style={{
+              transform: `scale(${scale})`,
+              transformOrigin: "top left",
+              width: `${baseWidth}px`,
+              height: `${Math.round(baseWidth * 0.75)}px`,
+            }}
+          >
+            <iframe {...iframeProps} className="h-full w-full border-0 bg-white" />
+          </div>
+
+          {device === "mobile" && (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-2.5 z-10 h-1 w-10 -translate-x-1/2 rounded-full bg-black/60"
+            />
+          )}
+
+          {!loaded && !failed && (
+            <div className="pointer-events-none absolute inset-0 grid place-items-center bg-[#0a0708]">
+              <span className="flex flex-col items-center gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="h-5 w-5 animate-spin rounded-full border-2 border-white/15 border-t-accent"
+                />
+                <span className="font-mono text-[8.5px] uppercase tracking-[0.18em] text-faint">
+                  Loading live preview
+                </span>
+              </span>
+            </div>
+          )}
+
+          {failed && (
+            <div className="absolute inset-0 grid place-items-center bg-[#0a0708] p-6 text-center">
+              <span className="max-w-xs">
+                <Icon
+                  name="info"
+                  size={18}
+                  className="mx-auto mb-2 text-accent-soft/80"
+                />
+                <span className="block text-[12px] font-medium text-ink">
+                  This site can't be embedded here.
+                </span>
+                <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFailed(false);
+                      setLoaded(false);
+                      setUseProxy((v) => !v);
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-[11px] text-ink transition-colors hover:border-white/30"
+                  >
+                    <Icon name="refresh" size={11} />
+                    Try alternate view
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setExpanded(true)}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-accent/20"
+                  >
+                    <Icon name="external" size={11} />
+                    Expand & navigate
+                  </button>
+                  <a
+                    href={rawUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] text-accent-soft hover:text-ink"
+                  >
+                    Open in new tab
+                    <Icon name="arrow-up-right" size={11} />
+                  </a>
+                </div>
+              </span>
+            </div>
+          )}
+        </div>
+
+        <p className="flex items-start gap-2 border-t border-white/[0.06] bg-white/[0.015] px-3 py-1.5 text-[9.5px] leading-snug text-faint">
+          <Icon name="info" size={11} className="mt-px shrink-0 text-accent-soft/60" />
+          <span>
+            Click expand to scroll and navigate the live site inside this page.
+            Some sites block embedding — use "Open in new tab" if it won't load.
+          </span>
+        </p>
+      </div>
+
+      {expanded && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Expanded preview of ${title}`}
+          className="fixed inset-0 z-[200] flex flex-col bg-black/95"
+        >
+          <div className="flex h-12 items-center justify-between gap-3 border-b border-white/[0.08] bg-[#0a0708]/95 px-4">
+            <div className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/80" />
+              <span className="truncate font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+                {host}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div
+                role="group"
+                aria-label="Expanded preview size"
+                className="flex items-center gap-0.5 rounded-full border border-white/[0.09] bg-white/[0.03] p-0.5"
+              >
+                {(["desktop", "mobile"] as const).map((option) => {
+                  const isActive = device === option;
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => {
+                        setExpandedDevice(option);
+                        setLoaded(false);
+                        setFailed(false);
+                      }}
+                      aria-pressed={isActive}
+                      className={cn(
+                        "grid h-7 w-8 place-items-center rounded-full transition-colors",
+                        isActive
+                          ? "bg-accent/20 text-accent-soft"
+                          : "text-faint hover:text-ink",
+                      )}
+                    >
+                      <Icon
+                        name={option === "desktop" ? "monitor" : "smartphone"}
+                        size={14}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setFailed(false);
+                  setLoaded(false);
+                  setUseProxy((v) => !v);
+                }}
+                className="grid h-8 w-8 place-items-center rounded-lg text-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
+                aria-label="Toggle proxy view"
+                title="Try alternate view"
+              >
+                <Icon name="refresh" size={14} />
+              </button>
+              <a
+                href={rawUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="grid h-8 w-8 place-items-center rounded-lg text-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
+                aria-label="Open in new tab"
+              >
+                <Icon name="arrow-up-right" size={14} />
+              </a>
+              <button
+                type="button"
+                onClick={() => setExpanded(false)}
+                className="grid h-8 w-8 place-items-center rounded-lg text-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
+                aria-label="Close expanded preview"
+              >
+                <Icon name="close" size={16} />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-auto bg-[#050304] p-2 sm:p-4">
+            <div
+              className={cn(
+                "mx-auto h-full overflow-auto bg-white",
+                device === "desktop" ? "w-full" : "w-[min(100%,480px)]",
+              )}
+            >
+              <iframe {...iframeProps} className="h-[200vh] min-h-[1600px] w-full border-0 bg-white" />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

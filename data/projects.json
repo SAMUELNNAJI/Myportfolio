@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "89f74c3a-ca36-419c-b61e-c62511a56f91",
+      "slug": "getmecare-ontario",
+      "title": "GETMECARE_ONTARIO",
+      "category": "Business",
+      "year": "2026",
+      "description": "Our platform connects Ontario families to carefully vetted PSWs and caregivers — pay directly, take control, and find quality care with our open marketplace.",
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "visual": "site",
+      "accent": "#ff3b3b",
+      "liveUrl": "https://www.getmecare-ontario.com/",
+      "repoUrl": "",
+      "featured": true,
+      "published": true,
+      "sample": false,
+      "createdAt": "2026-10-29T09:47:56.082Z",
+      "updatedAt": "2026-10-29T09:47:56.082Z"
+    }
+  ]
+}
