@@ -2,6 +2,28 @@
   "version": 1,
   "projects": [
     {
+      "id": "6c82751c-953b-4e5f-9cc2-e7ca856b28cb",
+      "slug": "target-jobspace",
+      "title": "TARGET JOBSPACE",
+      "category": "Job Recruiter",
+      "year": "2026",
+      "description": "Build extraordinary teams and discover meaningful work with a community that puts people first.",
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "visual": "app",
+      "accent": "#1d2ae2",
+      "liveUrl": "https://targetjobspace.com/",
+      "repoUrl": "",
+      "featured": true,
+      "published": true,
+      "sample": true,
+      "createdAt": "2026-10-29T17:08:20.111Z",
+      "updatedAt": "2026-10-29T17:08:20.111Z"
+    },
+    {
       "id": "89f74c3a-ca36-419c-b61e-c62511a56f91",
       "slug": "getmecare-ontario",
       "title": "GETMECARE_ONTARIO",

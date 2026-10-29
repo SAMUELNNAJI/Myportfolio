@@ -85,7 +85,7 @@ export function ProjectPreview({
       }
     }, 6000);
     return () => window.clearTimeout(timer);
-  }, [rawUrl, useProxy, failed, loaded]);
+  }, [rawUrl, useProxy, failed]);
 
   if (!rawUrl) {
     return (
@@ -206,17 +206,45 @@ export function ProjectPreview({
         </div>
 
         <div ref={cardRef} className="relative aspect-[4/3] overflow-hidden bg-[#0a0708] sm:aspect-[16/10] lg:aspect-[16/9]">
-          <div
-            className="absolute inset-0 overflow-hidden bg-white"
-            style={{
-              transform: `scale(${scale})`,
-              transformOrigin: "top left",
-              width: `${baseWidth}px`,
-              height: `${Math.round(baseWidth * 0.75)}px`,
-            }}
-          >
-            <iframe {...iframeProps} className="h-full w-full border-0 bg-white" />
-          </div>
+          {device === "mobile" ? (
+            <div className="absolute inset-0 grid place-items-center bg-[#0a0708] p-2">
+              <div
+                className="relative overflow-hidden rounded-[1.4rem] border border-white/15 bg-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.9)] ring-1 ring-black/40"
+                style={{
+                  height: "90%",
+                  width: "42%",
+                  maxWidth: "12rem",
+                }}
+              >
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-1/2 top-1.5 z-10 h-1 w-8 -translate-x-1/2 rounded-full bg-black/60"
+                />
+                <div
+                  className="absolute left-1/2 top-1/2 overflow-hidden bg-white"
+                  style={{
+                    transform: `translate(-50%, -50%) scale(${cardWidth > 0 ? Math.min((cardWidth * 0.42) / MOBILE_WIDTH, (cardWidth * 0.675) / (MOBILE_WIDTH * (16 / 9))) : 1})`,
+                    width: `${MOBILE_WIDTH}px`,
+                    height: `${Math.round(MOBILE_WIDTH * (16 / 9))}px`,
+                  }}
+                >
+                  <iframe {...iframeProps} className="h-full w-full border-0 bg-white" />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div
+              className="absolute inset-0 overflow-hidden bg-white"
+              style={{
+                transform: `scale(${scale})`,
+                transformOrigin: "top left",
+                width: `${baseWidth}px`,
+                height: `${Math.round(baseWidth * 0.75)}px`,
+              }}
+            >
+              <iframe {...iframeProps} className="h-full w-full border-0 bg-white" />
+            </div>
+          )}
 
           {device === "mobile" && (
             <span
@@ -316,7 +344,7 @@ export function ProjectPreview({
                 className="flex items-center gap-0.5 rounded-full border border-white/[0.09] bg-white/[0.03] p-0.5"
               >
                 {(["desktop", "mobile"] as const).map((option) => {
-                  const isActive = device === option;
+                  const isActive = expandedDevice === option;
                   return (
                     <button
                       key={option}
@@ -379,10 +407,10 @@ export function ProjectPreview({
             <div
               className={cn(
                 "mx-auto h-full overflow-auto bg-white",
-                device === "desktop" ? "w-full" : "w-[min(100%,480px)]",
+                expandedDevice === "desktop" ? "w-[1280px]" : "w-[min(100%,480px)]",
               )}
             >
-              <iframe {...iframeProps} className="h-[200vh] min-h-[1600px] w-full border-0 bg-white" />
+              <iframe {...iframeProps} key={`${expandedDevice}-${useProxy ? "proxy" : "direct"}`} className="h-[200vh] min-h-[1600px] w-full border-0 bg-white" />
             </div>
           </div>
         </div>
