@@ -136,6 +136,11 @@ export async function POST(request: NextRequest) {
   const resendKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL;
   const endpoint = process.env.CONTACT_FORM_ENDPOINT;
+  const smtpHost = process.env.SMTP_HOST;
+  const smtpPort = process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 587;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
+  const smtpFrom = process.env.SMTP_FROM ?? smtpUser;
 
   try {
     if (resendKey && to) {
@@ -186,6 +191,29 @@ export async function POST(request: NextRequest) {
           "DELIVERY_FAILED",
         );
       }
+
+      return NextResponse.json({
+        ok: true,
+        message: "Thanks — your message is on its way. I'll reply as soon as I can.",
+      });
+    }
+
+    if (smtpHost && smtpUser && smtpPass && to) {
+      const nodemailer = await import("nodemailer");
+      const transporter = nodemailer.createTransport({
+        host: smtpHost,
+        port: smtpPort,
+        secure: smtpPort === 465,
+        auth: { user: smtpUser, pass: smtpPass },
+      });
+
+      await transporter.sendMail({
+        from: smtpFrom,
+        to,
+        replyTo: email,
+        subject: `Portfolio enquiry — ${subject}`,
+        text,
+      });
 
       return NextResponse.json({
         ok: true,
