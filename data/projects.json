@@ -2,6 +2,74 @@
   "version": 1,
   "projects": [
     {
+      "id": "c02ba01a-88d9-43af-a3f1-e39fa62ea3fe",
+      "slug": "bio-clean",
+      "title": "BIO CLEAN",
+      "category": "Business",
+      "year": "2026",
+      "description": "BioClean Experts is your trusted partner for professional cleaning & facility services — from deep cleans and disinfection to painting, epoxy floors and laundry",
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "visual": "site",
+      "accent": "#ff3b3b",
+      "liveUrl": "https://bio-clean-experts.vercel.app/",
+      "repoUrl": "",
+      "featured": true,
+      "published": true,
+      "sample": false,
+      "createdAt": "2026-10-30T06:05:00.310Z",
+      "updatedAt": "2026-10-30T06:05:00.310Z"
+    },
+    {
+      "id": "ad14ab9f-784f-464e-ac97-92f42d39b21f",
+      "slug": "tech",
+      "title": "TECH",
+      "category": "TECH",
+      "year": "2026",
+      "description": "Find Verified STEM &\nDigital Skills Tutors in Nigeria",
+      "stack": [
+        "HTML",
+        "HTMLX",
+        "CSS",
+        "JavaScript",
+        "Django"
+      ],
+      "visual": "app",
+      "accent": "#ff3b3b",
+      "liveUrl": "https://myteacherconnect.org/",
+      "repoUrl": "",
+      "featured": true,
+      "published": true,
+      "sample": false,
+      "createdAt": "2026-10-30T06:03:18.081Z",
+      "updatedAt": "2026-10-30T06:03:18.081Z"
+    },
+    {
+      "id": "7beacc1f-1839-4c97-a8d5-69778456337c",
+      "slug": "medical",
+      "title": "MEDICAL",
+      "category": "MEDICAL",
+      "year": "2026",
+      "description": "FertileUs Network is a community-driven fertility resource network built for Africa. We connect communities with fertility services — whether you're trying to conceive, considering adoption, or exploring solutions.",
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "visual": "site",
+      "accent": "#ff3b3b",
+      "liveUrl": "https://fertileus.com.ng/",
+      "repoUrl": "",
+      "featured": true,
+      "published": true,
+      "sample": false,
+      "createdAt": "2026-10-30T06:01:31.724Z",
+      "updatedAt": "2026-10-30T06:01:31.724Z"
+    },
+    {
       "id": "1ee02b67-d26b-427c-b1a3-260efded7505",
       "slug": "farmer-company",
       "title": "FARMER COMPANY",
@@ -55,7 +123,7 @@
       "description": "Build extraordinary teams and discover meaningful work with a community that puts people first.",
       "stack": [
         "HTML",
-        "CSS",
+        "HTMX",
         "JavaScript",
         "Django"
       ],
@@ -67,7 +135,7 @@
       "published": true,
       "sample": true,
       "createdAt": "2026-10-29T17:08:20.111Z",
-      "updatedAt": "2026-10-30T05:56:59.945Z"
+      "updatedAt": "2026-10-30T05:57:53.362Z"
     },
     {
       "id": "89f74c3a-ca36-419c-b61e-c62511a56f91",
@@ -78,6 +146,7 @@
       "description": "Our platform connects Ontario families to carefully vetted PSWs and caregivers — pay directly, take control, and find quality care with our open marketplace.",
       "stack": [
         "HTML",
+        "HTMX",
         "CSS",
         "JavaScript",
         "Django"
@@ -90,7 +159,7 @@
       "published": true,
       "sample": false,
       "createdAt": "2026-10-29T09:47:56.082Z",
-      "updatedAt": "2026-10-30T05:57:11.168Z"
+      "updatedAt": "2026-10-30T05:57:32.835Z"
     }
   ]
 }

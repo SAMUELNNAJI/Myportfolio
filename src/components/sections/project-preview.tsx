@@ -28,10 +28,8 @@ export function ProjectPreview({
 }: ProjectPreviewProps) {
   const rawUrl = safeHttpUrl(liveUrl);
   const [device, setDevice] = useState<Device>("desktop");
-  const [expandedDevice, setExpandedDevice] = useState<Device>("desktop");
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [expanded, setExpanded] = useState(false);
   const [useProxy, setUseProxy] = useState(true);
   const autoSwitched = useRef(false);
 
@@ -53,25 +51,6 @@ export function ProjectPreview({
       ? `/api/preview?url=${encodeURIComponent(rawUrl)}`
       : rawUrl
     : "";
-
-  useEffect(() => {
-    if (!expanded) return;
-    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-    const { overflow, paddingRight } = document.body.style;
-    document.body.style.overflow = "hidden";
-    if (scrollBarWidth > 0) {
-      document.body.style.paddingRight = `${scrollBarWidth}px`;
-    }
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setExpanded(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = overflow;
-      document.body.style.paddingRight = paddingRight;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [expanded]);
 
   // Auto-fallback to the proxy if the direct embed does not load.
   useEffect(() => {
@@ -100,6 +79,8 @@ export function ProjectPreview({
   }
 
   const host = hostnameOf(rawUrl);
+  const baseWidth = device === "desktop" ? DESKTOP_WIDTH : MOBILE_WIDTH;
+  const scale = cardWidth > 0 ? cardWidth / baseWidth : 1;
 
   const iframeProps = {
     key: `${device}-${useProxy ? "proxy" : "direct"}`,
@@ -113,11 +94,6 @@ export function ProjectPreview({
     referrerPolicy: "no-referrer" as const,
     className: "h-full w-full border-0 bg-white",
   };
-
-  // Scaling so the site renders at a real device width and fits the card.
-  const baseWidth = device === "desktop" ? DESKTOP_WIDTH : MOBILE_WIDTH;
-  const frameWidth = device === "desktop" ? cardWidth : Math.min(cardWidth * 0.62, MOBILE_WIDTH);
-  const scale = cardWidth > 0 ? frameWidth / baseWidth : 1;
 
   return (
     <>
@@ -178,21 +154,6 @@ export function ProjectPreview({
             })}
           </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              setExpanded(true);
-              setExpandedDevice(device);
-              setLoaded(false);
-              setFailed(false);
-            }}
-            className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
-            aria-label={`Expand preview of ${title}`}
-            title="Expand to navigate"
-          >
-            <Icon name="external" size={12} />
-          </button>
-
           <a
             href={rawUrl}
             target="_blank"
@@ -223,7 +184,7 @@ export function ProjectPreview({
                 <div
                   className="absolute left-1/2 top-1/2 overflow-hidden bg-white"
                   style={{
-                    transform: `translate(-50%, -50%) scale(${cardWidth > 0 ? Math.min((cardWidth * 0.42) / MOBILE_WIDTH, (cardWidth * 0.675) / (MOBILE_WIDTH * (16 / 9))) : 1})`,
+                    transform: `translate(-50%, -50%) scale(${cardWidth > 0 ? Math.min((cardWidth * 0.5) / MOBILE_WIDTH, (cardWidth * 0.8) / (MOBILE_WIDTH * (16 / 9))) : 1})`,
                     width: `${MOBILE_WIDTH}px`,
                     height: `${Math.round(MOBILE_WIDTH * (16 / 9))}px`,
                   }}
@@ -244,13 +205,6 @@ export function ProjectPreview({
             >
               <iframe {...iframeProps} className="h-full w-full border-0 bg-white" />
             </div>
-          )}
-
-          {device === "mobile" && (
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-2.5 z-10 h-1 w-10 -translate-x-1/2 rounded-full bg-black/60"
-            />
           )}
 
           {!loaded && !failed && (
@@ -291,14 +245,6 @@ export function ProjectPreview({
                     <Icon name="refresh" size={11} />
                     Try alternate view
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setExpanded(true)}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/10 px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-accent/20"
-                  >
-                    <Icon name="external" size={11} />
-                    Expand & navigate
-                  </button>
                   <a
                     href={rawUrl}
                     target="_blank"
@@ -317,104 +263,10 @@ export function ProjectPreview({
         <p className="flex items-start gap-2 border-t border-white/[0.06] bg-white/[0.015] px-3 py-1.5 text-[9.5px] leading-snug text-faint">
           <Icon name="info" size={11} className="mt-px shrink-0 text-accent-soft/60" />
           <span>
-            Click expand to scroll and navigate the live site inside this page.
-            Some sites block embedding — use "Open in new tab" if it won't load.
+            Live preview of the project. Some sites block embedding — use "Open in new tab" if it won't load.
           </span>
         </p>
       </div>
-
-      {expanded && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Expanded preview of ${title}`}
-          className="fixed inset-0 z-[200] flex flex-col bg-black/95"
-        >
-          <div className="flex h-12 items-center justify-between gap-3 border-b border-white/[0.08] bg-[#0a0708]/95 px-4">
-            <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/80" />
-              <span className="truncate font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
-                {host}
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div
-                role="group"
-                aria-label="Expanded preview size"
-                className="flex items-center gap-0.5 rounded-full border border-white/[0.09] bg-white/[0.03] p-0.5"
-              >
-                {(["desktop", "mobile"] as const).map((option) => {
-                  const isActive = expandedDevice === option;
-                  return (
-                    <button
-                      key={option}
-                      type="button"
-                      onClick={() => {
-                        setExpandedDevice(option);
-                        setLoaded(false);
-                        setFailed(false);
-                      }}
-                      aria-pressed={isActive}
-                      className={cn(
-                        "grid h-7 w-8 place-items-center rounded-full transition-colors",
-                        isActive
-                          ? "bg-accent/20 text-accent-soft"
-                          : "text-faint hover:text-ink",
-                      )}
-                    >
-                      <Icon
-                        name={option === "desktop" ? "monitor" : "smartphone"}
-                        size={14}
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setFailed(false);
-                  setLoaded(false);
-                  setUseProxy((v) => !v);
-                }}
-                className="grid h-8 w-8 place-items-center rounded-lg text-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
-                aria-label="Toggle proxy view"
-                title="Try alternate view"
-              >
-                <Icon name="refresh" size={14} />
-              </button>
-              <a
-                href={rawUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="grid h-8 w-8 place-items-center rounded-lg text-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
-                aria-label="Open in new tab"
-              >
-                <Icon name="arrow-up-right" size={14} />
-              </a>
-              <button
-                type="button"
-                onClick={() => setExpanded(false)}
-                className="grid h-8 w-8 place-items-center rounded-lg text-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
-                aria-label="Close expanded preview"
-              >
-                <Icon name="close" size={16} />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-auto bg-[#050304] p-2 sm:p-4">
-            <div
-              className={cn(
-                "mx-auto h-full overflow-auto bg-white",
-                expandedDevice === "desktop" ? "w-[1280px]" : "w-[min(100%,480px)]",
-              )}
-            >
-              <iframe {...iframeProps} key={`${expandedDevice}-${useProxy ? "proxy" : "direct"}`} className="h-[200vh] min-h-[1600px] w-full border-0 bg-white" />
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
