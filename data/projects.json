@@ -2,6 +2,28 @@
   "version": 1,
   "projects": [
     {
+      "id": "a01b5e55-fc47-4492-97b6-75d6c64fa7d1",
+      "slug": "drop-hub",
+      "title": "DROP HUB",
+      "category": "Business",
+      "year": "2026",
+      "description": "The world's first dropshipping marketplace with Pi Network wallet, PayPal, and Naira payments — with built-in escrow that protects every transaction.",
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "visual": "site",
+      "accent": "#ff3b3b",
+      "liveUrl": "https://drop-shiping.onrender.com/",
+      "repoUrl": "",
+      "featured": true,
+      "published": true,
+      "sample": false,
+      "createdAt": "2026-10-30T06:14:52.622Z",
+      "updatedAt": "2026-10-30T06:14:52.622Z"
+    },
+    {
       "id": "c02ba01a-88d9-43af-a3f1-e39fa62ea3fe",
       "slug": "bio-clean",
       "title": "BIO CLEAN",
