@@ -421,7 +421,7 @@ export function ContactForm() {
           disabled={isSubmitting}
           aria-busy={isSubmitting}
           className={cn(
-            "group relative mt-1 inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-[linear-gradient(115deg,#ff3b3b_0%,#d92626_52%,#a81414_100%)] px-6 py-3.5 text-[13.5px] font-semibold text-white shadow-[0_12px_32px_-14px_rgba(255,59,59,0.85),inset_0_1px_0_rgba(255,255,255,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-14px_rgba(255,59,59,0.9)] disabled:translate-y-0 disabled:cursor-wait disabled:opacity-70",
+            "group relative mt-1 inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-[linear-gradient(115deg,#dc2626_0%,#d92626_52%,#a81414_100%)] px-6 py-3.5 text-[13.5px] font-semibold text-white shadow-[0_12px_32px_-14px_rgba(255,59,59,0.85),inset_0_1px_0_rgba(255,255,255,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-14px_rgba(255,59,59,0.9)] disabled:translate-y-0 disabled:cursor-wait disabled:opacity-70",
           )}
         >
           <span

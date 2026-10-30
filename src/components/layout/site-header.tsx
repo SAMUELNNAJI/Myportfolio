@@ -141,7 +141,7 @@ export function SiteHeader() {
             className="absolute inset-x-0 bottom-0 h-px overflow-hidden"
           >
             <div
-              className="h-full origin-left bg-[linear-gradient(90deg,#ff3b3b,#ff8a3d)] transition-transform duration-150 ease-out"
+              className="h-full origin-left bg-[linear-gradient(90deg,#dc2626,#ff8a3d)] transition-transform duration-150 ease-out"
               style={{ transform: `scaleX(${progress})` }}
             />
           </div>
@@ -276,7 +276,7 @@ function MobileNavigation({
             <Link
               href={sectionHref("#contact")}
               onClick={onClose}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(115deg,#ff3b3b,#d92626_55%,#a81414)] px-5 py-3.5 text-sm font-semibold text-white shadow-[0_12px_30px_-14px_rgba(255,59,59,0.9)]"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(115deg,#dc2626,#d92626_55%,#a81414)] px-5 py-3.5 text-sm font-semibold text-white shadow-[0_12px_30px_-14px_rgba(255,59,59,0.9)]"
             >
               Start a project
               <Icon name="arrow-up-right" size={15} />

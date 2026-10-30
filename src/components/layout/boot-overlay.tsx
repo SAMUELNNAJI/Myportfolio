@@ -31,7 +31,7 @@ const rightCode = [
   "</main>",
   "",
   ".boot {",
-  "  --accent: #ff3b3b;",
+  "  --accent: #dc2626;",
   "  --ember: #ff8a3d;",
   "}",
   "",

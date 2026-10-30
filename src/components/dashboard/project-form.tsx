@@ -40,7 +40,7 @@ const visualOptions: { value: ProjectVisual; label: string }[] = [
   { value: "app", label: "Web app" },
 ];
 
-const accentPresets = ["#ff3b3b", "#ff7a45", "#f43f5e", "#fb923c", "#ffb347", "#e11d48"];
+const accentPresets = ["#dc2626", "#ff7a45", "#f43f5e", "#fb923c", "#ffb347", "#e11d48"];
 
 function initialValues(project: Project | null): FormState {
   if (project) {
@@ -67,7 +67,7 @@ function initialValues(project: Project | null): FormState {
     description: "",
     stack: "HTML, CSS, JavaScript",
     visual: "site",
-    accent: "#ff3b3b",
+    accent: "#dc2626",
     liveUrl: "",
     repoUrl: "",
     featured: true,
@@ -404,7 +404,7 @@ export function ProjectForm({
                 type="checkbox"
                 checked={values.published}
                 onChange={(event) => setField("published", event.target.checked)}
-                className="mt-0.5 h-4 w-4 accent-[#ff3b3b]"
+                className="mt-0.5 h-4 w-4 accent-[#dc2626]"
               />
               <span>
                 <span className="block font-medium text-ink">Published</span>
@@ -416,7 +416,7 @@ export function ProjectForm({
                 type="checkbox"
                 checked={values.featured}
                 onChange={(event) => setField("featured", event.target.checked)}
-                className="mt-0.5 h-4 w-4 accent-[#ff3b3b]"
+                className="mt-0.5 h-4 w-4 accent-[#dc2626]"
               />
               <span>
                 <span className="block font-medium text-ink">Featured</span>
@@ -428,7 +428,7 @@ export function ProjectForm({
                 type="checkbox"
                 checked={values.sample}
                 onChange={(event) => setField("sample", event.target.checked)}
-                className="mt-0.5 h-4 w-4 accent-[#ff3b3b]"
+                className="mt-0.5 h-4 w-4 accent-[#dc2626]"
               />
               <span>
                 <span className="block font-medium text-ink">Sample layout</span>
@@ -449,7 +449,7 @@ export function ProjectForm({
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(115deg,#ff3b3b,#d92626_55%,#a81414)] px-6 py-3 text-[13px] font-semibold text-white shadow-[0_12px_30px_-14px_rgba(255,59,59,0.9)] transition-all duration-300 hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-55"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(115deg,#dc2626,#d92626_55%,#a81414)] px-6 py-3 text-[13px] font-semibold text-white shadow-[0_12px_30px_-14px_rgba(255,59,59,0.9)] transition-all duration-300 hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-55"
           >
             {submitting ? (
               <>

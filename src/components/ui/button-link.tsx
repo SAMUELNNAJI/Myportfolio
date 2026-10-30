@@ -28,7 +28,7 @@ const sizes: Record<Size, string> = {
 
 const variants: Record<Variant, string> = {
   primary:
-    "overflow-hidden text-white bg-[linear-gradient(115deg,#ff3b3b_0%,#d92626_52%,#a81414_100%)] shadow-[0_12px_32px_-14px_rgba(255,59,59,0.85),inset_0_1px_0_rgba(255,255,255,0.28)] hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-14px_rgba(255,59,59,0.9),inset_0_1px_0_rgba(255,255,255,0.34)]",
+    "overflow-hidden text-white bg-[linear-gradient(115deg,#dc2626_0%,#d92626_52%,#a81414_100%)] shadow-[0_12px_32px_-14px_rgba(255,59,59,0.85),inset_0_1px_0_rgba(255,255,255,0.28)] hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-14px_rgba(255,59,59,0.9),inset_0_1px_0_rgba(255,255,255,0.34)]",
   secondary:
     "border border-white/[0.12] bg-white/[0.035] text-ink backdrop-blur-sm hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.065]",
   ghost:

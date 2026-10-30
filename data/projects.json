@@ -2,6 +2,51 @@
   "version": 1,
   "projects": [
     {
+      "id": "1ee02b67-d26b-427c-b1a3-260efded7505",
+      "slug": "farmer-company",
+      "title": "FARMER COMPANY",
+      "category": "Business",
+      "year": "2026",
+      "description": "Jodozo Farms Ltd is an integrated agricultural and agro-allied company engaged in farming, livestock production, agro-processing, agricultural inputs, mechanised agriculture, equipment, water and irrigation, distribution, training and related agricultural services.",
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "visual": "site",
+      "accent": "#ff3b3b",
+      "liveUrl": "https://jodozofarms.com/",
+      "repoUrl": "",
+      "featured": true,
+      "published": true,
+      "sample": false,
+      "createdAt": "2026-10-30T05:56:32.084Z",
+      "updatedAt": "2026-10-30T05:56:32.084Z"
+    },
+    {
+      "id": "ac3d4ee8-e794-42a0-8ff5-6f7f158a9660",
+      "slug": "maids-employment-website",
+      "title": "MAIDS EMPLOYMENT WEBSITE",
+      "category": "Business",
+      "year": "2026",
+      "description": "Connect with background-verified house helps and maids who keep your home running — safely and reliably across Nigeria.",
+      "stack": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Django"
+      ],
+      "visual": "site",
+      "accent": "#3dff54",
+      "liveUrl": "https://www.selectroyalmaids.com.ng/",
+      "repoUrl": "",
+      "featured": true,
+      "published": true,
+      "sample": true,
+      "createdAt": "2026-10-30T05:55:26.498Z",
+      "updatedAt": "2026-10-30T05:56:48.197Z"
+    },
+    {
       "id": "6c82751c-953b-4e5f-9cc2-e7ca856b28cb",
       "slug": "target-jobspace",
       "title": "TARGET JOBSPACE",
@@ -11,7 +56,8 @@
       "stack": [
         "HTML",
         "CSS",
-        "JavaScript"
+        "JavaScript",
+        "Django"
       ],
       "visual": "app",
       "accent": "#1d2ae2",
@@ -21,7 +67,7 @@
       "published": true,
       "sample": true,
       "createdAt": "2026-10-29T17:08:20.111Z",
-      "updatedAt": "2026-10-29T17:08:20.111Z"
+      "updatedAt": "2026-10-30T05:56:59.945Z"
     },
     {
       "id": "89f74c3a-ca36-419c-b61e-c62511a56f91",
@@ -33,17 +79,18 @@
       "stack": [
         "HTML",
         "CSS",
-        "JavaScript"
+        "JavaScript",
+        "Django"
       ],
       "visual": "site",
-      "accent": "#ff3b3b",
+      "accent": "#dc2626",
       "liveUrl": "https://www.getmecare-ontario.com/",
       "repoUrl": "",
       "featured": true,
       "published": true,
       "sample": false,
       "createdAt": "2026-10-29T09:47:56.082Z",
-      "updatedAt": "2026-10-29T09:47:56.082Z"
+      "updatedAt": "2026-10-30T05:57:11.168Z"
     }
   ]
 }

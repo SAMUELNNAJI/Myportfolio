@@ -57,7 +57,7 @@ function normaliseRecord(raw: unknown): Project | null {
     accent:
       typeof item.accent === "string" && /^#[0-9a-f]{6}$/i.test(item.accent)
         ? item.accent
-        : "#ff3b3b",
+        : "#dc2626",
     liveUrl: typeof item.liveUrl === "string" ? item.liveUrl : "",
     repoUrl: typeof item.repoUrl === "string" ? item.repoUrl : "",
     featured: item.featured !== false,

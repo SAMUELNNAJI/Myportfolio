@@ -79,7 +79,7 @@ export function validateProjectFields(raw: Record<string, unknown>): ValidationR
   const accent =
     typeof raw.accent === "string" && /^#[0-9a-f]{6}$/i.test(raw.accent)
       ? raw.accent
-      : "#ff3b3b";
+      : "#dc2626";
 
   const categoryRaw = typeof raw.category === "string" ? raw.category.trim() : "";
   const category = isCategory(categoryRaw) ? categoryRaw : "Business";

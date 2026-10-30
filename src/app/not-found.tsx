@@ -34,7 +34,7 @@ export default function NotFound() {
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(115deg,#ff3b3b,#d92626_55%,#a81414)] px-5 py-3 text-[13px] font-semibold text-white shadow-[0_12px_30px_-14px_rgba(255,59,59,0.9)]"
+                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(115deg,#dc2626,#d92626_55%,#a81414)] px-5 py-3 text-[13px] font-semibold text-white shadow-[0_12px_30px_-14px_rgba(255,59,59,0.9)]"
               >
                 <Icon name="arrow-left" size={15} />
                 Back home

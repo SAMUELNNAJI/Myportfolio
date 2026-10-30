@@ -149,7 +149,7 @@ export function LoginPanel({ configured, onSuccess }: LoginPanelProps) {
                 <button
                   type="submit"
                   disabled={submitting || !password}
-                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(115deg,#ff3b3b,#d92626_55%,#a81414)] px-5 py-3.5 text-[14px] font-semibold text-white shadow-[0_12px_30px_-14px_rgba(255,59,59,0.9)] transition-all duration-300 hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-55"
+                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(115deg,#dc2626,#d92626_55%,#a81414)] px-5 py-3.5 text-[14px] font-semibold text-white shadow-[0_12px_30px_-14px_rgba(255,59,59,0.9)] transition-all duration-300 hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-55"
                 >
                   {submitting ? (
                     <>
