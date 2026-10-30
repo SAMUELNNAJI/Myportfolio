@@ -8,6 +8,7 @@ const ALLOWED = new Set(["http:", "https:"]);
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const target = searchParams.get("url");
+  const widthParam = searchParams.get("w");
 
   if (!target) {
     return new NextResponse("Missing url", { status: 400 });
@@ -59,6 +60,19 @@ export async function GET(request: Request) {
       out = out.replace(/<html[^>]*>/i, (m) => `${m}\n<head>${baseTag}</head>`);
     } else {
       out = `${baseTag}\n${out}`;
+    }
+
+    // Optionally force a specific viewport width (e.g. desktop/mobile) so the
+    // site's responsive layout is evaluated at that width from the start.
+    if (widthParam && /^\d+$/.test(widthParam)) {
+      const w = parseInt(widthParam, 10);
+      const viewportMeta = `<meta name="viewport" content="width=${w}, initial-scale=1" />`;
+      // Replace any existing viewport meta.
+      if (/<meta[^>]+name=["']viewport["'][^>]*>/i.test(out)) {
+        out = out.replace(/<meta[^>]+name=["']viewport["'][^>]*>/i, viewportMeta);
+      } else if (/<head[^>]*>/i.test(out)) {
+        out = out.replace(/<head[^>]*>/i, (m) => `${m}\n${viewportMeta}`);
+      }
     }
 
     const headers = new Headers();

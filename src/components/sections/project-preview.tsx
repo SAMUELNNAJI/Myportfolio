@@ -212,8 +212,8 @@ export function ProjectPreview({
                 className="relative overflow-hidden rounded-[1.4rem] border border-white/15 bg-white shadow-[0_20px_50px_-20px_rgba(0,0,0,0.9)] ring-1 ring-black/40"
                 style={{
                   height: "90%",
-                  width: "42%",
-                  maxWidth: "12rem",
+                  width: "50%",
+                  maxWidth: "14rem",
                 }}
               >
                 <span
