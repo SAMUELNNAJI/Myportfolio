@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProjectPreview } from "@/components/sections/project-preview";
 import { LinkOrPlaceholder } from "@/components/ui/button-link";
 import { Icon } from "@/components/ui/icon";
@@ -18,6 +18,7 @@ type Filter = "All" | ProjectCategory;
 
 export function ProjectsExplorer({ projects }: { projects: Project[] }) {
   const [active, setActive] = useState<Filter>("All");
+  const [showCount, setShowCount] = useState(4);
 
   const filters = useMemo<Filter[]>(() => {
     const present = new Set(projects.map((project) => project.category));
@@ -26,10 +27,16 @@ export function ProjectsExplorer({ projects }: { projects: Project[] }) {
     return ["All", ...known, ...custom];
   }, [projects]);
 
-  const visible =
-    active === "All"
-      ? projects
-      : projects.filter((project) => project.category === active);
+  const filtered = useMemo(
+    () =>
+      active === "All"
+        ? projects
+        : projects.filter((project) => project.category === active),
+    [projects, active],
+  );
+
+  const visible = filtered.slice(0, showCount);
+  const hasMore = showCount < filtered.length;
 
   const countFor = (filter: Filter) =>
     filter === "All"
@@ -37,6 +44,11 @@ export function ProjectsExplorer({ projects }: { projects: Project[] }) {
       : projects.filter((project) => project.category === filter).length;
 
   const hasSamples = projects.some((project) => project.sample);
+
+  // Reset pagination when the active filter changes.
+  useEffect(() => {
+    setShowCount(4);
+  }, [active]);
 
   return (
     <section id="projects" aria-labelledby="projects-title" className="section section-rule">
@@ -142,6 +154,19 @@ export function ProjectsExplorer({ projects }: { projects: Project[] }) {
                 </Reveal>
               ))}
             </div>
+
+            {hasMore && (
+              <div className="mt-8 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setShowCount((c) => c + 4)}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.035] px-6 py-3 text-[13px] font-semibold text-ink transition-colors hover:border-white/25 hover:bg-white/[0.06]"
+                >
+                  See more projects
+                  <Icon name="arrow-right" size={14} />
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
